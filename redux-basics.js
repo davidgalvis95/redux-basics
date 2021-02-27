@@ -29,11 +29,15 @@ const rootReducer = (state = initialState, action) => {
 const store = createStore(rootReducer);
 console.log(store.getState());
 
+//Subscription
+//this is executed right away the state changed, and is happening before the log, not because is before, but because is executed right away
+store.subscribe(() => {
+    console.log('[Subscription]', store.getState())
+})
+
 //Dispatching action
 //here are the dispatchers that are the ones that will generate actions over the state, to change it
 //we can pass over here, values, even payloads to do so. But the fixed value must be the type
 store.dispatch({type: 'INC_COUNTER'});
 store.dispatch({type: 'ADD_COUNTER', value: 10});
 console.log(store.getState());
-
-//Subscription
