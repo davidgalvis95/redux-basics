@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
@@ -28,7 +29,7 @@ class Counter extends Component {
     render () {
         return (
             <div>
-                <CounterOutput value={this.state.counter} />
+                <CounterOutput value={this.props.ctr} />
                 <CounterControl label="Increment" clicked={() => this.counterChangedHandler( 'inc' )} />
                 <CounterControl label="Decrement" clicked={() => this.counterChangedHandler( 'dec' )}  />
                 <CounterControl label="Add 5" clicked={() => this.counterChangedHandler( 'add', 5 )}  />
@@ -38,4 +39,17 @@ class Counter extends Component {
     }
 }
 
-export default Counter;
+//This state will be injected by react-redux component into this function automatically, by having that package there and the connect function
+//this is the part of the state we want to get from the global redux state
+const mapStateToProps = state => {
+    return {
+        ctr: state.counter
+    };
+}
+
+//connect is a function, not a HOC, so it's a function that returns a function and takes as input a component
+//here in the following line we have two functions, one that is executed first getting as input the mapStateToProps and returns a
+// function which is executed by getting as input the Component
+//precisely we pass 2 things to connect: 1. which part of the state we want to have access to, and 2. which actions we want to dispatch
+export default connect(mapStateToProps)(Counter);
+//in summary then, connect gives us access to a portion of tha state that is mapped into a component
