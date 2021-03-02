@@ -29,8 +29,10 @@ class Counter extends Component {
     render () {
         return (
             <div>
+                {/*instead of the state we are now consuming the state passed as props by redux*/}
                 <CounterOutput value={this.props.ctr} />
-                <CounterControl label="Increment" clicked={() => this.counterChangedHandler( 'inc' )} />
+                {/*instead of the anonymous function we are now executing the one that is set in the dispatcher actions config, as a prop*/}
+                <CounterControl label="Increment" clicked={this.props.onIncrementCounter} />
                 <CounterControl label="Decrement" clicked={() => this.counterChangedHandler( 'dec' )}  />
                 <CounterControl label="Add 5" clicked={() => this.counterChangedHandler( 'add', 5 )}  />
                 <CounterControl label="Subtract 5" clicked={() => this.counterChangedHandler( 'sub', 5 )}  />
@@ -45,11 +47,18 @@ const mapStateToProps = state => {
     return {
         ctr: state.counter
     };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onIncrementCounter: dispatch({type: 'INCREMENT'})
+    }
 }
 
 //connect is a function, not a HOC, so it's a function that returns a function and takes as input a component
 //here in the following line we have two functions, one that is executed first getting as input the mapStateToProps and returns a
 // function which is executed by getting as input the Component
 //precisely we pass 2 things to connect: 1. which part of the state we want to have access to, and 2. which actions we want to dispatch
-export default connect(mapStateToProps)(Counter);
+//if we only want to dispatch actions but not consume the state then we should set 'connect(null, mapDispatchToProps)(Counter);'
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);
 //in summary then, connect gives us access to a portion of tha state that is mapped into a component
