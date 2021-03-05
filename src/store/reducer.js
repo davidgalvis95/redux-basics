@@ -28,11 +28,19 @@ const reducer = (state = initialState, action) => {
         case 'STORE_RESULT':
             return {
                 ...state,
+                //by using concat we ensure to change the state immutably instead of changing the original state
                 results: state.results.concat( {id: new Date(), value:state.counter} )
             }
         case 'DELETE_RESULT':
+            //This is a way to remove an element immutably from an array
+            // const id = 2;
+            // const newArray = [...state.results]
+            // const updatedArray = newArray.splice(id,1)
+            //This is the most common way to remove an element from an array in an immutable way
+            const updatedArray = state.results.filter(result => result.id !== action.resultElId)
             return {
-
+                ...state,
+                results: updatedArray
             }
     }
     return state;

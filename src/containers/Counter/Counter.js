@@ -40,7 +40,8 @@ class Counter extends Component {
                 <button onClick={this.props.onStoreResult}>Store Result</button>
                 <ul>
                     {this.props.storedResults.map(strResult => {
-                        return <li key={strResult.id} onClick={this.props.onDeleteResult}>{strResult.value}</li>
+                        //here we are passing the id from the element that is being built in the redux reducer
+                        return <li key={strResult.id} onClick={() => this.props.onDeleteResult(strResult.id)}>{strResult.value}</li>
                     })}
                 </ul>
             </div>
@@ -59,13 +60,14 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIncrementCounter: dispatch({type: 'INCREMENT'}),
-        onDecrementCounter: dispatch({type: 'DECREMENT' }),
+        onIncrementCounter: () => dispatch({type: 'INCREMENT'}),
+        onDecrementCounter: () => dispatch({type: 'DECREMENT' }),
         //we can also pass a payload through
-        onAddCounter: dispatch({type: 'ADD', value: 5 }),
-        onSubtractCounter: dispatch({type: 'SUBTRACT', value: 5 }),
-        onStoreResult: dispatch({type: 'STORE_RESULT'}),
-        onDeleteResult: dispatch({type: 'DELETE_RESULT'})
+        onAddCounter: () => dispatch({type: 'ADD', value: 5 }),
+        onSubtractCounter: () => dispatch({type: 'SUBTRACT', value: 5 }),
+        onStoreResult: () => dispatch({type: 'STORE_RESULT'}),
+        //receiving that id and tying it into a property of the reducer action
+        onDeleteResult: (id) => dispatch({type: 'DELETE_RESULT', resultElId: id})
 
     }
 }
