@@ -53,6 +53,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onIncrementCounter: dispatch({type: 'INCREMENT'}),
         onDecrementCounter: dispatch({type: 'DECREMENT' }),
+        //we can also pass a payload through
         onAddCounter: dispatch({type: 'ADD', value: 5 }),
         onSubtractCounter: dispatch({type: 'SUBTRACT', value: 5 })
     }
