@@ -36,6 +36,13 @@ class Counter extends Component {
                 <CounterControl label="Decrement" clicked={this.props.onDecrementCounter} />
                 <CounterControl label="Add 5" clicked={this.props.onAddCounter} />
                 <CounterControl label="Subtract 5" clicked={this.props.onSubtractCounter} />
+                <hr/>
+                <button onClick={this.props.onStoreResult}>Store Result</button>
+                <ul>
+                    {this.props.storedResults.map(strResult => {
+                        return <li key={strResult.id} onClick={this.props.onDeleteResult}>{strResult.value}</li>
+                    })}
+                </ul>
             </div>
         );
     }
@@ -45,7 +52,8 @@ class Counter extends Component {
 //this is the part of the state we want to get from the global redux state
 const mapStateToProps = state => {
     return {
-        ctr: state.counter
+        ctr: state.counter,
+        storedResults: state.results
     };
 };
 
@@ -55,7 +63,10 @@ const mapDispatchToProps = dispatch => {
         onDecrementCounter: dispatch({type: 'DECREMENT' }),
         //we can also pass a payload through
         onAddCounter: dispatch({type: 'ADD', value: 5 }),
-        onSubtractCounter: dispatch({type: 'SUBTRACT', value: 5 })
+        onSubtractCounter: dispatch({type: 'SUBTRACT', value: 5 }),
+        onStoreResult: dispatch({type: 'STORE_RESULT'}),
+        onDeleteResult: dispatch({type: 'DELETE_RESULT'})
+
     }
 }
 
