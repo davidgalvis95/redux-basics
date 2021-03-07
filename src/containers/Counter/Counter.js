@@ -46,10 +46,11 @@ class Counter extends Component {
                 <CounterControl label="Add 5" clicked={this.props.onAddCounter}/>
                 <CounterControl label="Subtract 5" clicked={this.props.onSubtractCounter}/>
                 <hr/>
-                <button onClick={this.props.onStoreResult}>Store Result</button>
+                {/*this is a new way of passing the property through the reducer so that it can access the state of each of the other reducers*/}
+                <button onClick={() => this.props.onStoreResult(this.props.ctr)}>Store Result</button>
                 <ul>
                     {this.props.storedResults.map(strResult => {
-                        //here we are passing the id from the element that is being built in the redux reducer
+                        //here we are passing the id from the element that is being built in the redux reducerCounter
                         return <li key={strResult.id}
                                    onClick={() => this.props.onDeleteResult(strResult.id)}>{strResult.value}</li>
                     })}
@@ -63,8 +64,8 @@ class Counter extends Component {
 //this is the part of the state we want to get from the global redux state
 const mapStateToProps = state => {
     return {
-        ctr: state.counter,
-        storedResults: state.results
+        ctr: state.ctr.counter,
+        storedResults: state.res.results
     };
 };
 
@@ -75,8 +76,8 @@ const mapDispatchToProps = dispatch => {
         //we can also pass a payload through
         onAddCounter: () => dispatch({type: actionTypes.ADD, value: 5}),
         onSubtractCounter: () => dispatch({type: actionTypes.SUBTRACT, value: 5}),
-        onStoreResult: () => dispatch({type: actionTypes.STORE_RESULT}),
-        //receiving that id and tying it into a property of the reducer action
+        onStoreResult: (result) => dispatch({type: actionTypes.STORE_RESULT, result: result}),
+        //receiving that id and tying it into a property of the reducerCounter action
         onDeleteResult: (id) => dispatch({type: actionTypes.DELETE_RESULT, resultElId: id})
 
     }
