@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore, combineReducers} from "redux";
+import {createStore, combineReducers, applyMiddleware} from "redux";
 import {Provider} from 'react-redux'
 
 import './index.css';
@@ -13,9 +13,29 @@ import reducerResults from "./store/reducers/reducerResults";
 const rootReducer = combineReducers({
     ctr: reducerCounter,
     res: reducerResults
-})
+});
 
-const store = createStore(rootReducer);
+//This Middleware is only used for logging here, but we can use it for other stuff too
+//This is a Middleware, it does something in between the action dispatcher and the reducer receiving the action
+const logger = store => {
+    //This is kind of a closure that brings up the store and with the next function we pass it over to the reducer
+    return next => {
+        //the action is the action we dispatch
+        return action => {
+            console.log('[Middleware] Dispatching', action);
+            //we need to execute next in order to terminate the process and pass it into the reducer
+            //we can have access to that function and even change the type and add arguments, but do it with caution because maybe can cause unexpected behaviours
+            //next
+            const result = next(action);
+            //
+            console.log('[Middleware] next state', store.getState());
+            return result;
+        }
+    }
+}
+
+//to link the Middleware to the store we use applyMiddleware and pass the function that performs some of the actions there before passing into the reducer
+const store = createStore(rootReducer, applyMiddleware(logger));
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 registerServiceWorker();
