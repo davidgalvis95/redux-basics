@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore, combineReducers, applyMiddleware} from "redux";
+import {createStore, combineReducers, applyMiddleware, compose} from "redux";
 import {Provider} from 'react-redux'
 
 import './index.css';
@@ -34,8 +34,12 @@ const logger = store => {
     }
 }
 
+//compose allow us to combine enhancers
+//With this set up and wrapping the applyMiddleware with this constant, we activate the Redux DevTools extension and make it work ok
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 //to link the Middleware to the store we use applyMiddleware and pass the function that performs some of the actions there before passing into the reducer
-const store = createStore(rootReducer, applyMiddleware(logger));
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger)));
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 registerServiceWorker();
