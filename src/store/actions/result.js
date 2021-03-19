@@ -14,10 +14,15 @@ export const saveresult = (result) => {
 }
 
 
-export const storeResult = (result) => {
+//sometimes we can get access to the old or current state before updating by accessing to the getState function
+export const storeResult = (result, getState) => {
     //this is the async code that we can execute when working with redux-thunk, this is emulating a call to some async code
     return dispatch => {
         setTimeout( () => {
+            //This could be useful to make some changes based on one of the properties of the old state
+            //we should not try to overkill this way of accessing the state
+            const oldCounter = getState().ctr.counter;
+            console.log(oldCounter);
             dispatch(saveresult(result));
         }, 2000)
     }
