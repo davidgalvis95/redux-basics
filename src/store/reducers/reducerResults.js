@@ -5,6 +5,11 @@ const initialState = {
     results: []
 }
 
+const deleteResult = (state, action) => {
+    const updatedArray = state.results.filter(result => result.id !== action.resultElId)
+    return updateObject(state, {results: updatedArray});
+}
+
 const reducerCounter = (state = initialState, action) => {
 
     switch (action.type) {
@@ -26,8 +31,7 @@ const reducerCounter = (state = initialState, action) => {
             // const newArray = [...state.results]
             // const updatedArray = newArray.splice(id,1)
             //This is the most common way to remove an element from an array in an immutable way
-            const updatedArray = state.results.filter(result => result.id !== action.resultElId)
-            return updateObject(state, {results: updatedArray});
+            return deleteResult(state, action);
     }
     return state;
 }
